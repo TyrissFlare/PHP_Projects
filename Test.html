@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Solar System</title>
+    <style>
+        canvas {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="solarSystem" width="800" height="800"></canvas>
+
+    <script>
+        const canvas = document.getElementById("solarSystem");
+        const context = canvas.getContext("2d");
+
+        // Define solar system objects
+        const sun = { x: canvas.width / 2, y: canvas.height / 2, radius: 50, color: "yellow" };
+        const planets = [
+            { name: "Mercury", radius: 10, distance: 100, angle: 0, speed: 0.03, color: "gray" },
+            { name: "Venus", radius: 15, distance: 150, angle: 0, speed: 0.02, color: "orange" },
+            { name: "Earth", radius: 15, distance: 200, angle: 0, speed: 0.01, color: "blue" },
+        ];
+
+        function drawSolarSystem() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the Sun
+            context.beginPath();
+            context.arc(sun.x, sun.y, sun.radius, 0, 2 * Math.PI);
+            context.fillStyle = sun.color;
+            context.fill();
+
+            // Draw the planets
+            planets.forEach(planet => {
+                planet.angle += planet.speed;
+                const x = sun.x + planet.distance * Math.cos(planet.angle);
+                const y = sun.y + planet.distance * Math.sin(planet.angle);
+
+                context.beginPath();
+                context.arc(x, y, planet.radius, 0, 2 * Math.PI);
+                context.fillStyle = planet.color;
+                context.fill();
+
+                // Draw planet name
+                context.fillStyle = "black";
+                context.font = "12px Arial";
+                context.fillText(planet.name, x - planet.radius, y + planet.radius + 15);
+            });
+
+            requestAnimationFrame(drawSolarSystem);
+        }
+
+        drawSolarSystem();
+    </script>
+</body>
+</html>
